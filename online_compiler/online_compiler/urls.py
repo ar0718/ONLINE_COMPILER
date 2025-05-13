@@ -20,5 +20,5 @@ from online_compiler import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('code/', views.code, name='code'),
+    path('ide/', views.ide, name='ide'),
 ]
