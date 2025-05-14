@@ -47,7 +47,6 @@
 .editor {
   height: 61%;
   width: 95%;
-  margin-x: 3rem;
   margin-bottom: 2%;
   margin-top: 2%;
   background-color: var(--presence-bg);
