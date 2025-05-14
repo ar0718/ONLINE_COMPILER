@@ -1,0 +1,144 @@
+.ide {
+  position: relative;
+  height: 80vh;
+  width: 80vw;
+  background-color: var(--secondary-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border-top-left-radius: 0;
+}
+
+.header {
+  position: absolute;
+  top: -5rem;
+  left: 0;
+  height: 5rem;
+  width: 33%;
+  display: flex;
+  border-radius: 2rem 2rem 0 0;
+  overflow: hidden;
+}
+
+.header div {
+  width: 33%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  justify-content: center;
+  background-color: var(--presence-bg);
+}
+
+.header :nth-child(odd) {
+  background-color: var(--presence-beta);
+}
+
+.header .active {
+  width: 34%;
+  background-color: var(--primary);
+}
+
+.editor {
+  height: 61%;
+  width: 95%;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  background-color: var(--presence-bg);
+}
+
+.terminal {
+  height: 35%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  padding: 0;
+}
+
+.terminal .inputbox {
+  height: 100%;
+  width: 30%;
+  margin: 0;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--presence-bg);
+  border-bottom-left-radius: 1rem;
+  overflow: hidden;
+}
+.terminal .inputbox textarea {
+  height: 100%;
+  width: 100%;  
+  background-color: var(--presence-beta);
+  color: var(--light-presence);
+  font-size: 1.5rem;
+  box-sizing: border-box;
+  resize: none;
+  outline: none;
+  border: none;
+  padding: 1rem;
+}
+
+.terminal .outputbox {
+  position: relative;
+  height: 100%;
+  width: 70%;
+  margin: 0;
+  padding: 0rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--presence-bg);
+  border-bottom-right-radius: 1rem;
+  overflow: hidden;
+}
+.terminal .outputbox textarea {
+  height: 100%;
+  width: 100%;  
+  box-sizing: border-box;
+  background-color: var(--presence-beta);
+  color: var(--light-presence);
+  font-size: 1.5rem;
+  resize: none;
+  outline: none;
+  border: none;
+  padding: 1rem;
+}
+.terminal .outputbox .panel {  
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 5rem;
+  width: 20rem;
+  background-color: var(--primary-bg);
+  border-bottom-left-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.terminal .outputbox .panel .runner {
+  height: 100%;
+  width: 34%;
+  background-color: var(--primary);
+}
+
+.terminal .outputbox .panel .runtime {
+  height: 100%;
+  width: 33%;
+}
+
+.terminal .outputbox .panel .memory {
+  height: 100%;
+  width: 33%;
+  background-color: var(--secondary-bg);
+}

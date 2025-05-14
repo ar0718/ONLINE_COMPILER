@@ -1,0 +1,20 @@
+:root {
+  --primary-bg: #131313;
+  --primary-text: #D9D9D9;
+  --presence-bg: #1C1C1C;
+  --secondary-text: #B5B5B5;
+  --primary: #4495ff;
+  --secondary-bg: #262626;
+  --presence-beta: #171717;
+  --light-presence: #626262;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--primary-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
