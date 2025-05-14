@@ -1,3 +1,4 @@
+
 .ide {
   position: relative;
   height: 80vh;
@@ -31,6 +32,7 @@
   font-weight: bold;
   justify-content: center;
   background-color: var(--presence-bg);
+  cursor: pointer;
 }
 
 .header :nth-child(odd) {
@@ -45,8 +47,7 @@
 .editor {
   height: 61%;
   width: 95%;
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-x: 3rem;
   margin-bottom: 2%;
   margin-top: 2%;
   background-color: var(--presence-bg);
@@ -125,7 +126,11 @@
   justify-content: center;
   overflow: hidden;
 }
-
+.terminal .outputbox .panel div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .terminal .outputbox .panel .runner {
   height: 100%;
   width: 34%;
