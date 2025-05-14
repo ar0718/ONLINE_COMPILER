@@ -21,4 +21,6 @@ from online_compiler import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ide/', views.ide, name='ide'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.login, name='login'),
 ]

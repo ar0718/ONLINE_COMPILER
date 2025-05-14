@@ -1,8 +1,10 @@
 #include <iostream>
+
 int main() {
-    int a = 2;
-    int b = 5;
-    int sum = a + b;
-    std::cout << "Sum: " << sum;
+    int a, b, sum;
+    std::cout << "Enter two numbers: ";
+    std::cin >> a >> b;
+    sum = a + b;
+    std::cout << "Sum: " << sum << std::endl;
     return 0;
 }

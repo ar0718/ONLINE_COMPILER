@@ -6,6 +6,7 @@ class Code(models.Model):
     language = models.CharField(max_length=50)
     code = models.TextField()
     output_data = models.TextField(blank=True, null=True)
+    input_data = models.TextField(blank=True, null=True)
     error_data = models.TextField(blank=True, null=True)
     runtime = models.FloatField(blank=True, null=True)
     memory_used = models.FloatField(blank=True, null=True)
@@ -17,8 +18,14 @@ class Code(models.Model):
         self.output_data = None
         self.error_data = None
         self.memory_used = None
+        self.input_data = None
     
     def set_code(self, _code, _language):
+        self.code = _code
+        self.language = _language
+    
+    def set_code(self, _code, _language, _input_data=None):
+        self.input_data = _input_data
         self.code = _code
         self.language = _language
 
@@ -42,12 +49,14 @@ class Code(models.Model):
     
     def run_code(self):
         try:
+            input_data = self.input_data
             if self.language == 'python':
                 with open('main.py', 'w') as f:
                     f.write(self.code)
                 end_time = start_time = time.time()
                 result = subprocess.run(
                     ['python3', 'main.py'],
+                    input=input_data,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout = 3
@@ -59,7 +68,7 @@ class Code(models.Model):
                     f.write(self.code)
                 result1 = subprocess.run(['javac', 'Main.java'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = start_time = time.time()
-                result = subprocess.run(['java', 'Main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
+                result = subprocess.run(['java', 'Main'],input = input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
 
             elif self.language == 'c++':
@@ -67,7 +76,7 @@ class Code(models.Model):
                     f.write(self.code)
                 result1 = subprocess.run(['g++', 'main.cpp', '-o', 'main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = start_time = time.time()
-                result = subprocess.run(['./main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
+                result = subprocess.run(['./main'], input = input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
 
             elif self.language == 'c':
@@ -75,7 +84,7 @@ class Code(models.Model):
                     f.write(self.code)
                 result1 = subprocess.run(['gcc', 'main.c', '-o', 'main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = start_time = time.time()
-                result = subprocess.run(['./main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
+                result = subprocess.run(['./main'],input = input_data,  stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
 
             else:
@@ -83,17 +92,30 @@ class Code(models.Model):
 
             self.output_data = result.stdout.decode('utf-8')
 
+            self.error_data = ""
             if self.language != 'python':
                 self.error_data = result1.stderr.decode('utf-8')
-            self.error_data = ""
             self.error_data += result.stderr.decode('utf-8')
 
         except subprocess.TimeoutExpired:
             self.output_data = ""
-            self.error_data = "Execution timed out."
-        except Exception as e:
-            self.output_data = ""
-            self.error_data = f"An error occurred: {str(e)}"
+            self.error_data = "Execution timed out. You have exceeded the time limit of 3 seconds."
         finally:
             runtime = end_time - start_time
             self.runtime = runtime
+
+class User(models.Model):
+    username = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=100)
+    def __init__(self):
+        self.username = None
+        self.password = None
+    def set_user(self, _username, _password):
+        self.username = _username
+        self.password = _password
+    def get_username(self):
+        return self.username
+    def get_password(self):
+        return self.password
+
+        
