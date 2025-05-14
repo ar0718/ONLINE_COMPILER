@@ -50,7 +50,7 @@ class Code(models.Model):
                     ['python3', 'main.py'],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    timeout=3
+                    timeout = 3
                 )
                 end_time = time.time()
 
@@ -82,7 +82,7 @@ class Code(models.Model):
                 raise ValueError("Unsupported language")
 
             self.output_data = result.stdout.decode('utf-8')
-            
+
             if self.language != 'python':
                 self.error_data = result1.stderr.decode('utf-8')
             self.error_data = ""
