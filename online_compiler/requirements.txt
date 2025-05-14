@@ -1,0 +1,8 @@
+asgiref==3.8.1
+bcrypt==4.3.0
+Django==5.2.1
+djangorestframework==3.16.0
+Markdown==3.8
+psutil==7.0.0
+PyJWT==2.10.1
+sqlparse==0.5.3
