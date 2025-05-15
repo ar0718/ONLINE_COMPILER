@@ -86,13 +86,16 @@ def get_problem(request):
     if cnt == 0:
         return Response({"error": "No problems available"}, status=400)
     problems = Problem.objects.all()
+    # problems.delete()
     problem_list = []
     for problem in problems:
+        a = 0
         problem_list.append({
             "problem_id": problem.problem_id,
             "title": problem.title,
             "description": problem.description,
             "input_format": problem.input_format,
-            "output_format": problem.output_format
+            "output_format": problem.output_format,
+            "solve_count": problem.solve_count
         })
     return Response({"problems": problem_list}, status=200)
