@@ -7,12 +7,32 @@ const CDNEditor = ({ value = '', language = 'python', onChange }) => {
 
   // Track mount status to avoid CodeMirror bombing null div
   const [isReady, setIsReady] = useState(false);
-  const [height, setHeight] = useState(400);
+  const [height, setHeight] = useState(10);
 
   useEffect(() => {
     if (editorRef.current) {
       setIsReady(true);
     }
+  }, []);
+
+  // Function to update height from parent
+  const updateParentHeight = () => {
+    if (containerRef.current && containerRef.current.parentElement) {
+      const parentHeight = containerRef.current.parentElement.offsetHeight;
+      console.log('Parent height:', parentHeight);
+      setHeight(parentHeight);
+    }
+  };
+
+  // On load (mount)
+  useEffect(() => {
+    updateParentHeight();
+  }, [isReady]);
+
+  // On window resize
+  useEffect(() => {
+    window.addEventListener('resize', updateParentHeight);
+    return () => window.removeEventListener('resize', updateParentHeight);
   }, []);
 
   // Init CodeMirror only when ready
@@ -67,16 +87,6 @@ const CDNEditor = ({ value = '', language = 'python', onChange }) => {
     if (containerRef.current) resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
   }, [height]);
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-    if (containerRef.current && containerRef.current.parentElement) {
-      const parentHeight = containerRef.current.parentElement.offsetHeight;
-      console.log('Parent height:', parentHeight);
-      setHeight(parentHeight);
-    }
-    });
-  }, [isReady]);
 
   return (
     <div

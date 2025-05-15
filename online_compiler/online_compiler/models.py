@@ -1,5 +1,6 @@
 import subprocess
 import time
+import signal
 from django.db import models
 
 class Code(models.Model):
@@ -96,6 +97,11 @@ class Code(models.Model):
             if self.language != 'python':
                 self.error_data = result1.stderr.decode('utf-8')
             self.error_data += result.stderr.decode('utf-8')
+            if result.returncode != 0:
+                signum = -result.returncode
+                sig_name = signal.Signals(signum).name
+                self.error_data += f'{sig_name}'
+            # self.error_data += f'{result.returncode}'
 
         except subprocess.TimeoutExpired:
             self.output_data = ""
