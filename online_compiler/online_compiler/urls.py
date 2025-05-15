@@ -23,4 +23,6 @@ urlpatterns = [
     path('ide/', views.ide, name='ide'),
     path('signup/', views.signup, name='signup'),
     path('login/', views.login, name='login'),
+    path('add_problem/', views.add_problem, name='add_problem'),
+    path('get_problem/', views.get_problem, name='get_problem'),
 ]

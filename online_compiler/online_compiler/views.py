@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from online_compiler.models import Code
 from django.contrib.auth.models import User
+from online_compiler.models import Problem
 import jwt
 import bcrypt
 
@@ -59,3 +60,39 @@ def login(request):
         jwt_secret = jwt.encode({"username": username}, SECRET, algorithm="HS256")
         return Response({"message": "successfully logged in", "jwt": jwt_secret}, status=200)
 
+@api_view(['POST'])
+def add_problem(request):
+    jwt_token = request.data.get('jwt')
+    try:
+         jwt.decode(jwt_token, SECRET, algorithms="HS256")
+    except jwt.ExpiredSignatureError:
+        return Response({"error": "Token has expired"}, status=401)
+    except  jwt.InvalidTokenError as e:
+        return Response({"error": f"Invalid token {e}"}, status=401)
+    title = request.data.get('title')
+    description = request.data.get('description')
+    input_format = request.data.get('input_format') 
+    output_format = request.data.get('output_format')
+    if not title or not description or not input_format or not output_format:
+        return Response({"error": "title, description, input_format and output_format all are required"}, status=400)
+    cnt = Problem.objects.count()
+    problem_instance = Problem(_problem_id = cnt, _title=title, _description=description, _input_format=input_format, _output_format=output_format)
+    # problem_instance.problem_id = "problem" + str(cnt + 1)
+    problem_instance.save()
+    return Response({"message": "Problem added successfully"}, status=201)
+@api_view(['GET'])
+def get_problem(request):
+    cnt  = Problem.objects.count()
+    if cnt == 0:
+        return Response({"error": "No problems available"}, status=400)
+    problems = Problem.objects.all()
+    problem_list = []
+    for problem in problems:
+        problem_list.append({
+            "problem_id": problem.problem_id,
+            "title": problem.title,
+            "description": problem.description,
+            "input_format": problem.input_format,
+            "output_format": problem.output_format
+        })
+    return Response({"problems": problem_list}, status=200)

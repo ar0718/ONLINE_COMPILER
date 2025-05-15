@@ -124,4 +124,33 @@ class User(models.Model):
     def get_password(self):
         return self.password
 
-        
+class Problem(models.Model):
+    problem_id = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    input_format = models.TextField()
+    output_format = models.TextField()
+    solve_count = models.IntegerField(default=0)
+    def __init__(self, _problem_id, _title, _description, _input_format, _output_format, *args,**kwargs):
+        super().__init__(*args, **kwargs)
+        self.problem_id = _problem_id
+        self.title = _title
+        self.description = _description
+        self.input_format = _input_format
+        self.output_format = _output_format
+        self.solve_count = 0
+    def set_problem(self, _title, _description, _input_format, _output_format):
+        self.title = _title
+        self.description = _description
+        self.input_format = _input_format
+        self.output_format = _output_format
+    def get_problem_id(self):
+        return self.problem_id
+    def get_title(self):
+        return self.title
+    def get_description(self):
+        return self.description
+    def get_input_format(self):
+        return self.input_format
+    def get_output_format(self):
+        return self.output_format     
