@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 
 const CDNEditor = ({ value = '', language = 'python', onChange }) => {
@@ -8,6 +7,7 @@ const CDNEditor = ({ value = '', language = 'python', onChange }) => {
 
   // Track mount status to avoid CodeMirror bombing null div
   const [isReady, setIsReady] = useState(false);
+  const [height, setHeight] = useState(400);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -62,17 +62,28 @@ const CDNEditor = ({ value = '', language = 'python', onChange }) => {
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       editorInstance.current?.refresh();
-      editorInstance.current.setSize('100%', '100%');
+      editorInstance.current.setSize('100%', height+'px');
     });
     if (containerRef.current) resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [height]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+    if (containerRef.current && containerRef.current.parentElement) {
+      const parentHeight = containerRef.current.parentElement.offsetHeight;
+      console.log('Parent height:', parentHeight);
+      setHeight(parentHeight);
+    }
+    });
+  }, [isReady]);
 
   return (
     <div
       ref={containerRef}
       style={{
         height: '100%',
+        maxHeight: '400px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',

@@ -1,6 +1,8 @@
 // C++ code
 #include <iostream>
-int main() { 
-  std::cout << "Hello"; 
-  std::cout << "monkey";
+int main()
+{
+  std::cout << "Hello";
+  while(1){
+  }
 }

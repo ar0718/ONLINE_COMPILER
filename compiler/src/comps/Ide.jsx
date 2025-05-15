@@ -1,7 +1,6 @@
-
 import './styles/Ide.css'
 import CDNEditor from './CDNEditor'
-import {React, useState, useEffect, use} from 'react'
+import {React, useState, useEffect} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlay} from '@fortawesome/free-solid-svg-icons'
 
@@ -20,24 +19,32 @@ const defaultCode = {
 const Ide = () => {
   const [language, setLanguage] = useState('python');
   const [code, setCode] = useState(defaultCode[language]);
-  const [input, setInput] = useState('')
-  const [output, setOutput] = useState('~@Output:')
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('~@Output:');
+  const [error, setError] = useState('');
+  const [runtime, setRuntime] = useState('--');
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
       if (e.target.id === 'python-button') {
+        setOutput('~@Output:');
+        setRuntime('--');
         document.getElementById('python-button').classList.add('active')
         setLanguage('python');
         setCode(defaultCode['python']);
         document.getElementById('c-button').classList.remove('active')
         document.getElementById('java-button').classList.remove('active')
       } else if (e.target.id === 'c-button') {
+        setOutput('~@Output:');
+        setRuntime('--');
         document.getElementById('python-button').classList.remove('active')
         document.getElementById('c-button').classList.add('active')
         setLanguage('c++');
         setCode(defaultCode['cpp']);
         document.getElementById('java-button').classList.remove('active')
       } else if (e.target.id === 'java-button') {
+        setOutput('~@Output:');
+        setRuntime('--');
         document.getElementById('python-button').classList.remove('active')
         document.getElementById('c-button').classList.remove('active')
         document.getElementById('java-button').classList.add('active')
@@ -46,32 +53,30 @@ const Ide = () => {
       }
     })
   }, [])
-  useEffect(() => {
-    const runCode = async () => {
-      // console.log(language, code, input);
-      const response = await fetch('http://127.0.0.1:8000/ide/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          language,
-          code,
-          input,
-        }),
-      });
-      console.log(response.status);
-      console.log(response.output);
-      const data = await response.json();
-      setOutput(data.output);
-    };
-     //runCode();
-     window.addEventListener('click', (e) => {
-      if (e.target.id === 'runner') {
-        runCode();
-      }
-     })
-  },[language,code,input])
+
+  const runCode = async () => {
+    setOutput('~@Output:');
+    const response = await fetch('http://127.0.0.1:8000/ide/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        language,
+        code,
+        input,
+      }),
+    });
+    const data = await response.json();
+    setOutput(data.output);
+    if(data.error){
+      setOutput(data.error);
+    }
+    else{
+      setRuntime(data.runtime.toFixed(3));
+    }
+  };
+
   return (
     <div className="ide">
       <div className="header">
@@ -84,6 +89,14 @@ const Ide = () => {
         <div id="java-button" className="java">
           Java
         </div>
+      </div>
+      <div className="panel">
+        <div id="runner" className="runner" onClick={runCode}>
+          <FontAwesomeIcon icon={faPlay} style={{color: 'var(--primary-text)', fontSize: '3rem', cursor: 'pointer'}} />
+        </div>
+        <div className="runtime">
+          <p>{runtime} s</p>
+        </div>  
       </div>
       
       <div className="editor">
@@ -99,17 +112,7 @@ const Ide = () => {
         </div>
         <div className="outputbox">
           <textarea value={output} onChange={(e) => setOutput(e.target.value)} readOnly></textarea>
-          <div className="panel">
-            <div id="runner" className="runner">
-              <FontAwesomeIcon icon={faPlay} style={{color: 'var(--primary-text)', fontSize: '3rem', cursor: 'pointer'}} />
-            </div>
-            <div className="runtime">
-              
-            </div>  
-            <div className="memory">
-              
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
