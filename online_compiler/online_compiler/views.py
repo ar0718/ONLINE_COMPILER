@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from online_compiler.models import Code
 from django.contrib.auth.models import User
 from online_compiler.models import Problem
+from online_compiler.models import checker
 import jwt
 import bcrypt
 
@@ -76,7 +77,7 @@ def add_problem(request):
     if not title or not description or not input_format or not output_format:
         return Response({"error": "title, description, input_format and output_format all are required"}, status=400)
     cnt = Problem.objects.count()
-    problem_instance = Problem(_problem_id = cnt, _title=title, _description=description, _input_format=input_format, _output_format=output_format)
+    problem_instance = Problem(_solve_count = 0,_problem_id = cnt, _title=title, _description=description, _input_format=input_format, _output_format=output_format)
     # problem_instance.problem_id = "problem" + str(cnt + 1)
     problem_instance.save()
     return Response({"message": "Problem added successfully"}, status=201)
@@ -99,3 +100,23 @@ def get_problem(request):
             "solve_count": problem.solve_count
         })
     return Response({"problems": problem_list}, status=200)
+@api_view(['POST'])
+def submit_code(request):
+    jwt_token = request.data.get('jwt')
+    try:
+         jwt.decode(jwt_token, SECRET, algorithms="HS256")
+    except jwt.ExpiredSignatureError:
+        return Response({"error": "Token has expired"}, status=401)
+    except  jwt.InvalidTokenError as e:
+        return Response({"error": f"Invalid token {e}"}, status=401)
+    problem_id = request.data.get('problem_id')
+    user_code = request.data.get('code')
+    language = request.data.get('language')
+    if not problem_id or not user_code or not language:
+        return Response({"error": "problem_id, code and language all are required"}, status=400)
+    result = checker(problem_id, user_code, language)
+    # return Response({"resul": f"{result}"}, status=200)
+    if result:
+        return Response({"message": "Code is correct"}, status=200)
+    else:
+        return Response({"message": "Code is incorrect"}, status=400)

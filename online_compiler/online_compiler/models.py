@@ -29,7 +29,8 @@ class Code(models.Model):
         self.input_data = _input_data
         self.code = _code
         self.language = _language
-
+    def get_input_data(self):
+        return self.input_data
     def get_code(self):
         return self.code
     
@@ -75,6 +76,7 @@ class Code(models.Model):
             elif self.language == 'c++':
                 with open('main.cpp', 'w') as f:
                     f.write(self.code)
+        
                 result1 = subprocess.run(['g++', 'main.cpp', '-o', 'main'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = start_time = time.time()
                 result = subprocess.run(['./main'], input = input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
@@ -107,8 +109,10 @@ class Code(models.Model):
             self.output_data = ""
             self.error_data = "Execution timed out. You have exceeded the time limit of 3 seconds."
         finally:
+            
             runtime = end_time - start_time
             self.runtime = runtime
+            
 
 class User(models.Model):
     username = models.CharField(max_length=100, unique=True)
@@ -130,15 +134,15 @@ class Problem(models.Model):
     description = models.TextField()
     input_format = models.TextField()
     output_format = models.TextField()
-    solve_count = models.IntegerField(default=0)
-    def __init__(self, _problem_id, _title, _description, _input_format, _output_format, *args,**kwargs):
-        super().__init__(*args, **kwargs)
-        self.problem_id = _problem_id
-        self.title = _title
-        self.description = _description
-        self.input_format = _input_format
-        self.output_format = _output_format
-        self.solve_count = 0
+    solve_count = models.IntegerField()
+    # def __init__(self, _solve_count, _problem_id, _title, _description, _input_format, _output_format, *args,**kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.problem_id = _problem_id
+    #     self.title = _title
+    #     self.description = _description
+    #     self.input_format = _input_format
+    #     self.output_format = _output_format
+    #     self.solve_count = _solve_count
     def set_problem(self, _title, _description, _input_format, _output_format):
         self.title = _title
         self.description = _description
@@ -154,3 +158,26 @@ class Problem(models.Model):
         return self.input_format
     def get_output_format(self):
         return self.output_format     
+
+def equal_ingnore_whitespace(str1, str2):
+    str1 = str1.replace(" ", "")
+    str1 = str1.replace("\n", "")
+    str2 = str2.replace(" ", "")
+    str2 = str2.replace("\n", "")
+    return str1 == str2
+def checker(problem_id, user_code, language):
+    problem = Problem.objects.get(problem_id=problem_id)
+    input_data = problem.input_format
+    output_data = problem.output_format
+    code_instance = Code()
+    code_instance.set_code(user_code, language, input_data.encode('utf-8'))
+    code_instance.run_code()
+    # return code_instance.get_output_data(), output_data
+    if equal_ingnore_whitespace(code_instance.get_output_data(), output_data):
+        problem.solve_count += 1
+        # change the problem solve count stored in the database
+        Problem.objects.filter(problem_id=problem.problem_id).update(solve_count=problem.solve_count)
+        # problem.save()
+        return True
+    else:
+        return False

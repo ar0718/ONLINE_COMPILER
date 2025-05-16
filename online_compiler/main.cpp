@@ -1,16 +1,19 @@
-// C++ code
 #include <iostream>
-#include <vector>
 using namespace std;
-int main()
-{ 
-  std::cout << "Hello"; 
-  std::cout << "Hello";
-  int a;
-  cin >> a;
-  int b;
-  cin >> b;
-  vector<int> v(4);
-  //cout << v[10000000000000000] <<"\n";
-  cout << "qqq\n";
+
+int main() {
+    int nums[5];
+    for(int i = 0; i < 5; i++) {
+        cin >> nums[i];
+    }
+
+    int max_num = nums[0];
+    for(int i = 1; i < 5; i++) {
+        if(nums[i] > max_num) {
+            max_num = nums[i];
+        }
+    }
+
+    cout << max_num << endl;
+    return 0;
 }
