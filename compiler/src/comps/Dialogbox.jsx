@@ -1,4 +1,4 @@
-import './styles/Dialogbox.css'
+import './styles/DialogBox.css'
 import {React, useState, useEffect, use} from 'react'
 const Dialogbox = (props) => {
     const [input, setInput] = useState('')
