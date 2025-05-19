@@ -135,19 +135,15 @@ class Problem(models.Model):
     input_format = models.TextField()
     output_format = models.TextField()
     solve_count = models.IntegerField()
-    # def __init__(self, _solve_count, _problem_id, _title, _description, _input_format, _output_format, *args,**kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.problem_id = _problem_id
-    #     self.title = _title
-    #     self.description = _description
-    #     self.input_format = _input_format
-    #     self.output_format = _output_format
-    #     self.solve_count = _solve_count
-    def set_problem(self, _title, _description, _input_format, _output_format):
+    def set_problem(self, _title, _description, _input_format, _output_format, _solve_count, _problem_id):
+        self.solve_count = _solve_count
+        self.problem_id = _problem_id
         self.title = _title
         self.description = _description
         self.input_format = _input_format
         self.output_format = _output_format
+    def get_solve_count(self):
+        return self.solve_count
     def get_problem_id(self):
         return self.problem_id
     def get_title(self):
@@ -158,6 +154,7 @@ class Problem(models.Model):
         return self.input_format
     def get_output_format(self):
         return self.output_format     
+    
 
 def equal_ingnore_whitespace(str1, str2):
     str1 = str1.replace(" ", "")

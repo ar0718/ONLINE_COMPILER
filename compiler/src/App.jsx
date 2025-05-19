@@ -9,6 +9,7 @@ import ReactDom from 'react-dom/client'
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Signup from './Signup'
 import Login from './Login'
+import Addproblem from './comps/Addproblem'
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
           <Route path = "/" element = {<Ide/>}/>
           <Route path = "ide" element = {<Ide/>}/>
           <Route path = "login" element = {<Login/>}/> 
+          <Route path = "addproblem" element = {<Addproblem/>}/>
         </Routes>
     </BrowserRouter>
   )

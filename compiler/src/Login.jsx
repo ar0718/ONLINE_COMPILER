@@ -11,6 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [count, setCount] = useState(0)
     const [data, setData] = useState('')
+    const [info, setInfo] = useState('')
     const cnt = (value) => {
         setCount(value)
     }
@@ -42,6 +43,20 @@ const Login = () => {
             fetchData();
         }
     },[count]);
+    useEffect(() =>{
+        if(data){
+            if(data.error === ""){
+                localStorage.setItem('jwt', data.jwt)
+                window.location.href = '/ide'
+            }
+            else{
+                console.log("chai")
+                console.log(data.error)
+                setInfo(data.error)
+                setCount(0)
+            }
+        }
+    },[data]);
     if(count === 0){
         return(
             <Dialogbox
@@ -50,6 +65,7 @@ const Login = () => {
             placeholder="Enter your Username"
             onSubmit = {cnt}
             handleChange = {hanChange}
+            info = {info}
             /> 
         )
     }
@@ -63,20 +79,9 @@ const Login = () => {
             placeholder="Enter your password"
             onSubmit = {cnt}
              handleChange = {hanChange}
+            info = ""
              />
         )
-    }
-    else {
-
-        return(
-            <div>
-                <h1>Welcome {username}</h1>
-                <h1>{data.error}</h1>
-                <h1>{data.message}</h1>
-                <h2>Your password is {password}</h2>
-            </div>
-        )
-        
     }
     
 }

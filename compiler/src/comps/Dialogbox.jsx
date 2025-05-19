@@ -35,6 +35,9 @@ const Dialogbox = (props) => {
                     {console.log(count)}
                     Next
                 </button>
+                <div className="info">
+                    {props.info}
+                </div>
             </div>
         </div>
     )

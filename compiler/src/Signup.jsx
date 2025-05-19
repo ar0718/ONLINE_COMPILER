@@ -1,12 +1,17 @@
 import Dialogbox from './comps/DialogBox'
 import { use, useState } from 'react'
 import { useEffect } from 'react'
-
+// import JSON from 'react-json-view'
 const Signup = () => {
+    const jwt_token = localStorage.getItem('jwt')
+    if(jwt_token){
+        window.location.href = '/ide'
+    }
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [count, setCount] = useState(0)
     const [data, setData] = useState('')
+    const [info, setInfo] = useState('')
     const cnt = (value) => {
         setCount(value)
     }
@@ -34,10 +39,24 @@ const Signup = () => {
             const data1 = await response.json()
             console.log(data1)
             setData(data1)
-            }
+        }
             fetchData();
         }
     },[count]);
+    useEffect(() =>{
+        if(data){
+            if(data.error === ""){
+                window.location.href = '/login'
+            }
+            else{
+                console.log("chai")
+                console.log(data.error)
+                setInfo(data.error)
+                setCount(0)
+            }
+        }
+            
+    },[data])
     if(count === 0){
         return(
             <Dialogbox
@@ -46,6 +65,7 @@ const Signup = () => {
             placeholder="Enter your Username"
             onSubmit = {cnt}
             handleChange = {hanChange}
+            info = {info}
             /> 
         )
     }
@@ -59,16 +79,8 @@ const Signup = () => {
             placeholder="Enter your password"
             onSubmit = {cnt}
              handleChange = {hanChange}
+             info = {info}
              />
-        )
-    }
-    else{
-        return(
-            <div>
-                <h1>Welcome {username}</h1>
-                <h1>{data.error}</h1>
-                <h2>Your password is {password}</h2>
-            </div>
         )
     }
     

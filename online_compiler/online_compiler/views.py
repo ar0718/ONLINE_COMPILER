@@ -28,7 +28,7 @@ def ide(request):
     runtime = code_instance.get_runtime()
     if error:
         return Response({"error": error}, status=500)
-    return Response({"output": output, "runtime": runtime}, status=200)       
+    return Response({"output": output, "runtime": runtime, "error":""}, status=200)       
 
 @api_view(['POST'])
 def signup(request):
@@ -43,7 +43,7 @@ def signup(request):
         return Response({"error": "Username already exists"}, status=300)
     user_instance = User(username=username, password=password)
     user_instance.save()
-    return Response({"message": "User created successfully"}, status=201)
+    return Response({"message": "User created successfully", "error": ""}, status=201)
 
 @api_view(['POST'])
 def login(request):
@@ -58,7 +58,7 @@ def login(request):
         return Response({"error": "wrong username or password"}, status=300)
     else:
         jwt_secret = jwt.encode({"username": username}, SECRET, algorithm="HS256")
-        return Response({"message": "successfully logged in", "jwt": jwt_secret}, status=200)
+        return Response({"message": "successfully logged in", "jwt": jwt_secret, "error":""}, status=200)
 
 @api_view(['POST'])
 def add_problem(request):
@@ -76,10 +76,10 @@ def add_problem(request):
     if not title or not description or not input_format or not output_format:
         return Response({"error": "title, description, input_format and output_format all are required"}, status=400)
     cnt = Problem.objects.count()
-    problem_instance = Problem(_solve_count = 0,_problem_id = cnt, _title=title, _description=description, _input_format=input_format, _output_format=output_format)
+    problem_instance = Problem(solve_count = 0,problem_id = cnt, title=title, description=description, input_format=input_format, output_format=output_format)
     # problem_instance.problem_id = "problem" + str(cnt + 1)
     problem_instance.save()
-    return Response({"message": "Problem added successfully"}, status=201)
+    return Response({"message": "Problem added successfully", "error":""}, status=201)
 @api_view(['GET'])
 def get_problem(request):
     cnt  = Problem.objects.count()
@@ -98,7 +98,7 @@ def get_problem(request):
             "output_format": problem.output_format,
             "solve_count": problem.solve_count
         })
-    return Response({"problems": problem_list}, status=200)
+    return Response({"problems": problem_list, "error":""}, status=200)
 @api_view(['POST'])
 def submit_code(request):
     jwt_token = request.data.get('jwt')
@@ -116,6 +116,6 @@ def submit_code(request):
     result = checker(problem_id, user_code, language)
     # return Response({"resul": f"{result}"}, status=200)
     if result:
-        return Response({"message": "Code is correct"}, status=200)
+        return Response({"message": "Code is correct", "error":""}, status=200)
     else:
-        return Response({"message": "Code is incorrect"}, status=400)
+        return Response({"message": "Code is incorrect", "error":""}, status=400)
