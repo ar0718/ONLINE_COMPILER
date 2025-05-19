@@ -51,11 +51,10 @@ def login(request):
     password = request.data.get('password')
     if not username or not password:
         return Response({"error": "username and password both are required"}, status=400)
-    password_stored = User.objects.get(username=username).password
     if not User.objects.filter(username=username).exists():
         return Response({"error": "wrong username or password"}, status=300)
-
-    elif not bcrypt.checkpw(password.encode('utf-8'), password_stored.encode('utf-8')):
+    password_stored = User.objects.get(username=username).password
+    if not bcrypt.checkpw(password.encode('utf-8'), password_stored.encode('utf-8')):
         return Response({"error": "wrong username or password"}, status=300)
     else:
         jwt_secret = jwt.encode({"username": username}, SECRET, algorithm="HS256")

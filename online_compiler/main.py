@@ -1,4 +1,3 @@
 # Python code
-import subprocess
 print("Hello, world!")
-subprocess.run(['ls'])
+print(2+3)

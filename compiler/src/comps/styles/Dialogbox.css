@@ -1,0 +1,69 @@
+.mainbox{
+    background-color: var(--primary-bg);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.logo{
+    position: absolute;
+    top:5vh;
+    left:5vw;
+    font-size: 3rem;
+    color: white;
+}
+.welcome{
+    position:absolute;
+    color:aliceblue;
+    font-size: 1.5rem;
+    font-weight: 600;
+    top: 18vh;
+}
+.bigbox{
+    position: relative;
+    border-radius: 1rem;
+    padding-top: 4rem;
+    background-color: var(--presence-bg);
+    width: 50%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.register{
+    position: absolute;
+    color: var(--primary-text);
+    top: 1rem;
+    left: 2rem;
+    color: aliceblue;
+    font-size: 2rem;
+    font-weight: 800;
+}
+.smallbox{
+    background-color: white;
+    border: none;
+    width: 70%;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--light-presence);
+    background-color: var(--primary-text);
+    outline: none;
+}
+.terms{
+    color: White;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+}
+.button{
+    background-color: var(--primary);
+    border: none;
+    outline: none;
+    margin-top: 1rem;
+    color: var(--primary-text);
+    border-radius: 2.5rem;
+    padding: 1rem 2rem;
+}
