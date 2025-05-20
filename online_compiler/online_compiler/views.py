@@ -120,7 +120,7 @@ def submit_code(request):
     # return Response({"result": result}, status=200)
     # return Response({"resul": f"{result}"}, status=200)
     if result:
-        return Response({"message": "Code is correct", "error":""}, status=200)
+        return Response({"message": "Code is correct", "error":"", "code":"0"}, status=200)
     else:
-        return Response({"message": "Code is incorrect", "error":""}, status=400)
+        return Response({"message": "Code is incorrect", "error":"", "code" : "1"}, status=400)
 

@@ -16,7 +16,9 @@ const defaultCode = {
   java: '// Java code\npublic class Main { \n\tpublic static void main(String[] args) { \n\t\tSystem.out.println("Hello"); \n\t} \n}',
 };
 
-const Ide = () => {
+const Ide = ({showSubmit = false, problem_id = null }) => {
+  const jwt_token = localStorage.getItem('jwt')
+  const jwt = localStorage.getItem('jwt')
   const [language, setLanguage] = useState('python');
   const [code, setCode] = useState(defaultCode[language]);
   const [input, setInput] = useState('');
@@ -75,8 +77,37 @@ const Ide = () => {
     else{
       setRuntime(data.runtime.toFixed(3));
     }
-  };
-
+  }; 
+  const handleSubmit = async () =>{
+    try{
+      setOutput('@Output:')
+      setError('')
+      setRuntime('--')
+      const response = await fetch('http://127.0.0.1:8000/submit_code/',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          language,
+          code,
+          problem_id,
+          jwt
+        }),
+      });
+      const data = await response.json()
+      if(data.code === "0"){
+        setOutput('Problem Solved! 🎉')
+      }
+      else{
+        setOutput('either wrong answer or compilation error!')
+      }
+    }
+    catch(err){
+      setError('network error')
+      setOutput('Failed to exectue')
+    }
+  }
   return (
     <div className="ide">
       <div className="header">
@@ -98,6 +129,13 @@ const Ide = () => {
           <p>{runtime} s</p>
         </div>  
       </div>
+      {
+        showSubmit && (
+          <button onClick = {handleSubmit} className = "submit-btn">
+            Submit Solution
+          </button>
+        )
+      }
       
       <div className="editor">
         <Editor

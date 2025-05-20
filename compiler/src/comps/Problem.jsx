@@ -57,7 +57,7 @@ const Problem = () => {
                 </div>
             </div>
             <div className="ide-container">
-                <Ide />
+                <Ide showSubmit ={true} problem_id={id.id}/>
             </div>
         </div>
     </div>
