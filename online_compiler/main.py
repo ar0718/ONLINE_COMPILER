@@ -1,4 +1,4 @@
 # Python code
 print("Hello, world!")
-prn("Hello, world!")
-
+print("hello, world!")
+print("monnkeyt, world!")

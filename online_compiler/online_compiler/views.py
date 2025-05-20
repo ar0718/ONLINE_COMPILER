@@ -76,7 +76,7 @@ def add_problem(request):
     if not title or not description or not input_format or not output_format:
         return Response({"error": "title, description, input_format and output_format all are required"}, status=400)
     cnt = Problem.objects.count()
-    problem_instance = Problem(solve_count = 0,problem_id = cnt, title=title, description=description, input_format=input_format, output_format=output_format)
+    problem_instance = Problem(solve_count = 0,problem_id = cnt, title=title, description=description, input_format=input_format, output_format=output_format, sub = 0 )
     # problem_instance.problem_id = "problem" + str(cnt + 1)
     problem_instance.save()
     return Response({"message": "Problem added successfully", "error":""}, status=201)
@@ -94,9 +94,11 @@ def get_problem(request):
             "problem_id": problem.problem_id,
             "title": problem.title,
             "description": problem.description,
-            "input_format": problem.input_format,
-            "output_format": problem.output_format,
-            "solve_count": problem.solve_count
+            # "input_format": problem.input_format,
+            # "output_format": problem.output_format,
+            "solve_count": problem.solve_count,
+            "total_submissions": problem.sub
+            
         })
     return Response({"problems": problem_list, "error":""}, status=200)
 @api_view(['POST'])
@@ -108,14 +110,17 @@ def submit_code(request):
         return Response({"error": "Token has expired"}, status=401)
     except  jwt.InvalidTokenError as e:
         return Response({"error": f"Invalid token {e}"}, status=401)
+    username = jwt.decode(jwt_token, SECRET, algorithms="HS256")["username"]
     problem_id = request.data.get('problem_id')
     user_code = request.data.get('code')
     language = request.data.get('language')
     if not problem_id or not user_code or not language:
         return Response({"error": "problem_id, code and language all are required"}, status=400)
-    result = checker(problem_id, user_code, language)
+    result = checker(problem_id, user_code, language, username)
+    # return Response({"result": result}, status=200)
     # return Response({"resul": f"{result}"}, status=200)
     if result:
         return Response({"message": "Code is correct", "error":""}, status=200)
     else:
         return Response({"message": "Code is incorrect", "error":""}, status=400)
+

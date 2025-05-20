@@ -73,6 +73,7 @@ class Code(models.Model):
                 result = subprocess.run(['java', 'Main'],input = input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
 
+
             elif self.language == 'c++':
                 with open('main.cpp', 'w') as f:
                     f.write(self.code)
@@ -81,6 +82,7 @@ class Code(models.Model):
                 end_time = start_time = time.time()
                 result = subprocess.run(['./main'], input = input_data, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
+   
 
             elif self.language == 'c':
                 with open('main.c', 'w') as f:
@@ -89,6 +91,7 @@ class Code(models.Model):
                 end_time = start_time = time.time()
                 result = subprocess.run(['./main'],input = input_data,  stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
                 end_time = time.time()
+
 
             else:
                 raise ValueError("Unsupported language")
@@ -135,13 +138,15 @@ class Problem(models.Model):
     input_format = models.TextField()
     output_format = models.TextField()
     solve_count = models.IntegerField()
-    def set_problem(self, _title, _description, _input_format, _output_format, _solve_count, _problem_id):
+    sub = models.IntegerField()
+    def set_problem(self, _title, _description, _input_format, _output_format, _solve_count, _problem_id, _sub):
         self.solve_count = _solve_count
         self.problem_id = _problem_id
         self.title = _title
         self.description = _description
         self.input_format = _input_format
         self.output_format = _output_format
+        self.sub = _sub
     def get_solve_count(self):
         return self.solve_count
     def get_problem_id(self):
@@ -153,7 +158,9 @@ class Problem(models.Model):
     def get_input_format(self):
         return self.input_format
     def get_output_format(self):
-        return self.output_format     
+        return self.output_format  
+    def get_sub(self):
+        return self.sub
     
 
 def equal_ingnore_whitespace(str1, str2):
@@ -162,7 +169,12 @@ def equal_ingnore_whitespace(str1, str2):
     str2 = str2.replace(" ", "")
     str2 = str2.replace("\n", "")
     return str1 == str2
-def checker(problem_id, user_code, language):
+
+class Problem_solve(models.Model):
+    problem_id = models.IntegerField()
+    username = models.CharField(max_length=100)
+
+def checker(problem_id, user_code, language, username):
     problem = Problem.objects.get(problem_id=problem_id)
     input_data = problem.input_format
     output_data = problem.output_format
@@ -170,11 +182,21 @@ def checker(problem_id, user_code, language):
     code_instance.set_code(user_code, language, input_data.encode('utf-8'))
     code_instance.run_code()
     # return code_instance.get_output_data(), output_data
-    if equal_ingnore_whitespace(code_instance.get_output_data(), output_data):
+    if equal_ingnore_whitespace(code_instance.get_output_data(), output_data) and code_instance.get_error_data() == "":
+        problem_solve = Problem_solve.objects.filter(problem_id=problem_id, username=username)
+        if(problem_solve.exists()):
+            return True
         problem.solve_count += 1
+        problem.sub += 1
+        problem_solve_instance = Problem_solve(problem_id=problem_id, username=username)
+        problem_solve_instance.save()
         # change the problem solve count stored in the database
         Problem.objects.filter(problem_id=problem.problem_id).update(solve_count=problem.solve_count)
+        Problem.objects.filter(problem_id=problem.problem_id).update(sub=problem.sub)
         # problem.save()
         return True
     else:
+        problem.sub += 1
+        problem.save()
         return False
+    

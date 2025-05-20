@@ -10,6 +10,9 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Signup from './Signup'
 import Login from './Login'
 import Addproblem from './comps/Addproblem'
+import AllProblems from './comps/AllProblems'
+import Problem from './comps/Problem'
+
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +22,8 @@ function App() {
           <Route path = "ide" element = {<Ide/>}/>
           <Route path = "login" element = {<Login/>}/> 
           <Route path = "addproblem" element = {<Addproblem/>}/>
+          <Route path = "allproblems" element = {<AllProblems/>}/>
+          <Route path = "problem/:id" element = {<Problem/>}/> 
         </Routes>
     </BrowserRouter>
   )
