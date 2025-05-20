@@ -1,19 +1,19 @@
 import './styles/Ide.css'
-import CDNEditor from './CDNEditor'
 import {React, useState, useEffect} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlay} from '@fortawesome/free-solid-svg-icons'
+import Editor from "@monaco-editor/react";
 
 const languageModes = {
-  python: 'python',
-  cpp: 'text/x-c++src',
-  java: 'text/x-java',
+  'python': 'python',
+  'c++': 'cpp',
+  'java': 'text/x-java',
 };
 
 const defaultCode = {
   python: '# Python code\nprint("Hello, world!")',
-  cpp: '// C++ code\n#include <iostream>\nint main() { std::cout << "Hello"; }',
-  java: '// Java code\npublic class Main { public static void main(String[] args) { System.out.println("Hello"); } }',
+  cpp: '// C++ code\n#include <iostream>\nusing namespace std;\n\nint main() { \n\tcout << "Hello"; \n}',
+  java: '// Java code\npublic class Main { \n\tpublic static void main(String[] args) { \n\t\tSystem.out.println("Hello"); \n\t} \n}',
 };
 
 const Ide = () => {
@@ -100,10 +100,11 @@ const Ide = () => {
       </div>
       
       <div className="editor">
-        <CDNEditor
+        <Editor
           value={code}
           language={languageModes[language]}
           onChange={(updatedCode) => setCode(updatedCode)}
+          theme ="vs-dark"
         /> 
       </div>
       <div className="terminal">

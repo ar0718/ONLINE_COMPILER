@@ -99,7 +99,7 @@ class Code(models.Model):
             if self.language != 'python':
                 self.error_data = result1.stderr.decode('utf-8')
             self.error_data += result.stderr.decode('utf-8')
-            if result.returncode != 0:
+            if result.returncode != 0 and self.error_data == "":
                 signum = -result.returncode
                 sig_name = signal.Signals(signum).name
                 self.error_data += f'{sig_name}'

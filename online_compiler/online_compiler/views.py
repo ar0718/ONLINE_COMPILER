@@ -26,7 +26,7 @@ def ide(request):
     output = code_instance.get_output_data()
     error = code_instance.get_error_data()
     runtime = code_instance.get_runtime()
-    if error:
+    if error :
         return Response({"error": error}, status=500)
     return Response({"output": output, "runtime": runtime, "error":""}, status=200)       
 
