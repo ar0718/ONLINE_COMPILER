@@ -1,8 +1,9 @@
 import Dialogbox from './comps/DialogBox'
 import { use, useState } from 'react'
 import { useEffect } from 'react'
-
-const Login = () => {
+// import JSON from 'react-json-view'
+import Navbar from './comps/Navbar'
+const Signup = () => {
     const jwt_token = localStorage.getItem('jwt')
     if(jwt_token){
         window.location.href = '/ide'
@@ -26,7 +27,7 @@ const Login = () => {
     useEffect(() => {
         if(count === 2){
         const fetchData = async () => {
-            const response = await fetch('http://127.0.0.1:8000/login/', {
+            const response = await fetch('http://127.0.0.1:8000/signup/', {
                 method: 'POST',
                 headers: {
                         'Content-Type': 'application/json'
@@ -39,15 +40,14 @@ const Login = () => {
             const data1 = await response.json()
             console.log(data1)
             setData(data1)
-            }
+        }
             fetchData();
         }
     },[count]);
     useEffect(() =>{
         if(data){
             if(data.error === ""){
-                localStorage.setItem('jwt', data.jwt)
-                window.location.href = '/ide'
+                window.location.href = '/login'
             }
             else{
                 console.log("chai")
@@ -56,33 +56,40 @@ const Login = () => {
                 setCount(0)
             }
         }
-    },[data]);
+            
+    },[data])
     if(count === 0){
         return(
+            <div>
+            <Navbar/>
             <Dialogbox
-            name="Login"
-            title="Welcome back!"
+            name="Register"
+            title="Welcome new User!"
             placeholder="Enter your Username"
             onSubmit = {cnt}
             handleChange = {hanChange}
             info = {info}
             /> 
+            </div>
         )
     }
     else if(count === 1){
         console.log(username)
         console.log(password)
         return(
+            <div>
+            <Navbar></Navbar>
             <Dialogbox
-            name="Login"
-            title="Welcome back!"
+            name="Register"
+            title="Welcome new User!"
             placeholder="Enter your password"
             onSubmit = {cnt}
              handleChange = {hanChange}
-            info = ""
+             info = {info}
              />
+            </div>
         )
     }
     
 }
-export default Login;
+export default Signup

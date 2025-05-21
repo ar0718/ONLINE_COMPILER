@@ -3,7 +3,7 @@ import {React, useState, useEffect} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlay} from '@fortawesome/free-solid-svg-icons'
 import Editor from "@monaco-editor/react";
-
+import Navbar from './Navbar';
 const languageModes = {
   'python': 'python',
   'c++': 'cpp',
@@ -109,6 +109,7 @@ const Ide = ({showSubmit = false, problem_id = null }) => {
     }
   }
   return (
+    
     <div className="ide">
       <div className="header">
         <div id="python-button" className="python active">

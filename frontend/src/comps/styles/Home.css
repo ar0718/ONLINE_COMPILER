@@ -1,0 +1,17 @@
+.home{
+    display: flex ;
+    flex-direction: column;
+    gap: 8rem;
+    justify-content: center;
+    align-items: center;
+}
+.header1{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+}
+.idq{
+    height:80vh;
+    margin: 10rem 0rem;
+
+}

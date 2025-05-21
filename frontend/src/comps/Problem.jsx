@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import Ide from './Ide'
 import './styles/Problem.css'
+import Navbar from './Navbar'
 const Problem = () => {
     const  id = useParams()
     const [problem, setProblem] = useState(null)
@@ -43,6 +44,7 @@ const Problem = () => {
     if (!problem) return <div className="error">Problem not found</div>
     return(
     <div className="problem-page">
+        <Navbar/>
         <div className="problem-container">
             <div className="problem-details">
                 <h1>{problem.title}</h1>

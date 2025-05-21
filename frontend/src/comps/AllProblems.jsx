@@ -3,7 +3,7 @@ import {React, useState, useEffect} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleRight } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
-
+import Navbar from './Navbar'
 const calculateRate = (solved, tried) => {
   if (tried === 0) return { rate: 'N/A', color: 'var(--secondary-text)' }
   
@@ -44,6 +44,7 @@ useEffect (() => {
   if (error) return <div className="error">{error}</div>
  return (
     <div className="problems-container">
+      <Navbar/>
       <h1>Practice Problems</h1>
       <div className="problems-list">
         {problems.map(problem => {

@@ -12,14 +12,16 @@ import Login from './Login'
 import Addproblem from './comps/Addproblem'
 import AllProblems from './comps/AllProblems'
 import Problem from './comps/Problem'
-
+import Navbar from './comps/Navbar'
+import Home from './Home'
 function App() {
   return (
     <BrowserRouter>
         <Routes>
+          <Route path = "navbar" element = {<Navbar/>}/>
           <Route path = "signup" element = {<Signup/>}/>
-          <Route path = "/" element = {<Ide/>}/>
-          <Route path = "ide" element = {<Ide/>}/>
+          <Route path = "/" element = {<Home/>}/>
+          <Route path = "ide" element = {<Home/>}/>
           <Route path = "login" element = {<Login/>}/> 
           <Route path = "addproblem" element = {<Addproblem/>}/>
           <Route path = "allproblems" element = {<AllProblems/>}/>

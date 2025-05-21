@@ -1,8 +1,8 @@
 import Dialogbox from './comps/DialogBox'
 import { use, useState } from 'react'
 import { useEffect } from 'react'
-// import JSON from 'react-json-view'
-const Signup = () => {
+import Navbar from './comps/Navbar'
+const Login = () => {
     const jwt_token = localStorage.getItem('jwt')
     if(jwt_token){
         window.location.href = '/ide'
@@ -26,7 +26,7 @@ const Signup = () => {
     useEffect(() => {
         if(count === 2){
         const fetchData = async () => {
-            const response = await fetch('http://127.0.0.1:8000/signup/', {
+            const response = await fetch('http://127.0.0.1:8000/login/', {
                 method: 'POST',
                 headers: {
                         'Content-Type': 'application/json'
@@ -39,14 +39,15 @@ const Signup = () => {
             const data1 = await response.json()
             console.log(data1)
             setData(data1)
-        }
+            }
             fetchData();
         }
     },[count]);
     useEffect(() =>{
         if(data){
             if(data.error === ""){
-                window.location.href = '/login'
+                localStorage.setItem('jwt', data.jwt)
+                window.location.href = '/ide'
             }
             else{
                 console.log("chai")
@@ -55,34 +56,39 @@ const Signup = () => {
                 setCount(0)
             }
         }
-            
-    },[data])
+    },[data]);
     if(count === 0){
         return(
+            <div>
+            <Navbar/>
             <Dialogbox
-            name="Register"
-            title="Welcome new User!"
+            name="Login"
+            title="Welcome back!"
             placeholder="Enter your Username"
             onSubmit = {cnt}
             handleChange = {hanChange}
             info = {info}
             /> 
+            </div>
         )
     }
     else if(count === 1){
         console.log(username)
         console.log(password)
         return(
+            <div>
+            <Navbar></Navbar>
             <Dialogbox
-            name="Register"
-            title="Welcome new User!"
+            name="Login"
+            title="Welcome back!"
             placeholder="Enter your password"
             onSubmit = {cnt}
              handleChange = {hanChange}
-             info = {info}
+            info = ""
              />
+             </div>
         )
     }
     
 }
-export default Signup
+export default Login;
